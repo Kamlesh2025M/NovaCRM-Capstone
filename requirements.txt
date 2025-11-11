@@ -1,0 +1,17 @@
+# M1 - Data & Docs Setup Dependencies
+# Core dependencies for building FAISS index
+
+langchain==0.3.12
+langchain-community==0.3.12
+langchain-openai==0.2.14
+langchain-text-splitters==0.3.5
+
+# Vector store
+faiss-cpu==1.9.0
+
+# Environment management
+python-dotenv==1.0.0
+
+# OpenAI
+openai==1.58.1
+
