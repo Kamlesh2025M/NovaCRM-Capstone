@@ -17,14 +17,14 @@ NovaCRM Assistant is an intelligent assistant for a fictional B2B SaaS company (
 
 ## Project Status
 
-**Current Milestone:** M2 - MCP Server ✅
+**Current Milestone:** M3 - Graph & Routing ✅
 
 ### Completed Milestones
 - [x] M1 - Data & Docs Setup
 - [x] M2 - MCP Server
+- [x] M3 - Graph & Routing
 
 ### Upcoming Milestones
-- [ ] M3 - Graph & Routing
 - [ ] M4 - Prompts & Guardrails
 - [ ] M5 - Final Submission
 
@@ -36,22 +36,36 @@ NovaCRM Assistant is an intelligent assistant for a fictional B2B SaaS company (
 - **Build Index Script**: `scripts/build_index.py` - Chunks, embeds, and stores KB in FAISS (~45 chunks)
 
 ### M2 - MCP Server
-- **5 Production Tools**:
-  1. `account_lookup` - Get account details by ID or company name
-  2. `invoice_status` - Retrieve invoices and payment status (with period filtering)
-  3. `ticket_summary` - Get open tickets and SLA risks (with time window)
-  4. `usage_report` - API/email/storage usage vs plan limits (with warnings)
-  5. `kb_search` - Search knowledge base documents (keyword-based fallback)
+- **5 Production Tools**: account_lookup, invoice_status, ticket_summary, usage_report, kb_search
+- **Dual Protocol**: MCP (port 3000) + REST API (port 3001) with Swagger docs
 
-- **Dual Protocol Support**:
-  - MCP Protocol on port 3000 (for MCP clients)
-  - REST API on port 3001 (for HTTP access)
-  - Swagger documentation at /docs
+### M3 - Graph & Routing
+- **LangGraph State Machine**:
+  - 5 nodes: Router, Retrieve, Tools, Synthesize, Escalate
+  - Conditional routing based on intent classification (FAQ / DataLookup / Escalation)
+  - TypedDict state management with evidence tracking
+  
+- **RAG Retriever**:
+  - FAISS-based semantic search over knowledge base
+  - Document formatting with citations
+  - Configurable k parameter for result count
+  
+- **MCP Client Integration**:
+  - Synchronous tool calling via REST API
+  - Connection testing and error handling
+  - Tool parameter determination from query
 
-- **Robust Design**:
-  - All tools return JSON with `explanation` and `source` fields
-  - Graceful error handling with descriptive messages
-  - Thread-safe operation with concurrent MCP and REST servers
+- **Command-Line Interface**:
+  - Interactive and single-query modes
+  - Account context management
+  - Model/temperature configuration
+  - Markdown-formatted output with evidence
+
+- **Prompt Engineering**:
+  - System style guide (core principles, banned phrases)
+  - Router (few-shot intent classification)
+  - RAG synthesis (quality checklist)
+  - Tool justification (rationale before calls)
 
 ## Setup Instructions (M1)
 
@@ -121,23 +135,33 @@ NovaCRM-Capstone/
 │       ├── support_module.md
 │       ├── api_guide.md
 │       └── security_faq.md
+├── app/                       # Application (M3)
+│   ├── __init__.py
+│   ├── state.py               # TypedDict state schema
+│   ├── retriever.py           # FAISS RAG retriever
+│   ├── mcp_client.py          # MCP client (sync)
+│   ├── graph.py               # LangGraph state machine (5 nodes)
+│   └── cli.py                 # Command-line interface
+├── prompts/                   # Prompt templates (M3)
+│   ├── system.md              # Style guide
+│   ├── router.md              # Intent classification
+│   ├── rag_synth.md           # RAG synthesis
+│   └── tool_check.md          # Tool justification
 ├── servers/                   # MCP Server (M2)
 │   └── mcp_nova/
 │       ├── server.py          # FastMCP server with REST facade
-│       └── tools/             # Tool implementations
-│           ├── __init__.py
-│           ├── account.py     # account_lookup tool
-│           ├── invoice.py     # invoice_status tool
-│           ├── ticket.py      # ticket_summary tool
-│           ├── usage.py       # usage_report tool
-│           └── kb_search.py   # kb_search tool
+│       └── tools/             # 5 tool implementations
 ├── index/                     # FAISS vector store (generated, gitignored)
 │   └── faiss_index/
+├── outputs/                   # Output screenshots and verification
+│   ├── M1.jpg                 # M1 milestone output
+│   ├── M2.jpg                 # M2 milestone output
+│   └── M3.jpg                 # M3 milestone output
 ├── scripts/                   # Utility scripts
 │   └── build_index.py         # Build FAISS index
 ├── .env.example               # Environment variables template
 ├── .gitignore                 # Git exclusions
-├── requirements.txt           # Python dependencies (M1 + M2)
+├── requirements.txt           # Python dependencies (M1 + M2 + M3)
 ├── TEST_MCP_TOOLS.md          # MCP tool testing guide
 └── README.md                  # This file
 ```
@@ -185,6 +209,11 @@ After completing M1 setup:
 - **FastAPI**: 0.115.6 (REST API framework)
 - **Uvicorn**: 0.34.0 (ASGI server)
 - **Pydantic**: 2.10.3 (Data validation)
+
+### M3 - Graph & Routing
+- **LangGraph**: 0.2.59 (State machine orchestration)
+- **LangChain Core**: 0.3.21 (Prompts, output parsers)
+- **Requests**: 2.32.3 (HTTP client for MCP)
 
 ## M2 - Using MCP Server
 
@@ -252,14 +281,128 @@ All tools follow consistent contract:
 }
 ```
 
+### M2 Output
+
+![M2 Output](outputs/M2.jpg)
+
+---
+
+## M3 - Using CLI Assistant
+
+### Prerequisites
+1. **FAISS Index**: Must be built first
+   ```bash
+   python scripts/build_index.py
+   ```
+
+2. **MCP Server**: Must be running (for DataLookup queries)
+   ```bash
+   # Terminal 1
+   python servers/mcp_nova/server.py
+   ```
+
+### Interactive Mode
+
+```bash
+# Terminal 2
+python -m app.cli
+```
+
+**Features**:
+- Continuous conversation
+- Account context management (`account A001`)
+- Commands: `exit`, `quit`, `q` to end
+
+**Example Session**:
+```
+You: What is NovaCRM?
+[Router] Classified intent: FAQ
+[Retrieve] Retrieved 5 documents
+...
+
+You: account A001
+Account context set to: A001
+
+You: Show my invoices
+[Router] Classified intent: DataLookup
+[Tools] Called 1 tools
+...
+```
+
+### Single Query Mode
+
+```bash
+# FAQ query
+python -m app.cli --query "What are the pricing plans?"
+
+# DataLookup with account context
+python -m app.cli --account A001 --query "Show my invoices"
+
+# Custom model and temperature
+python -m app.cli --model gpt-4 --temperature 0.3 --query "What is NovaCRM?"
+```
+
+### CLI Options
+
+| Option | Short | Default | Description |
+|--------|-------|---------|-------------|
+| `--query` | `-q` | None | Single query (omit for interactive) |
+| `--account` | `-a` | None | Account ID for context (e.g., A001) |
+| `--model` | `-m` | gpt-4o-mini | OpenAI model |
+| `--temperature` | `-t` | 0.0 | LLM temperature (0.0-1.0) |
+
+### Output Format
+
+```
+================================================================================
+NovaCRM Assistant Response
+Timestamp: 2025-11-11 12:00:00
+Intent: FAQ
+================================================================================
+
+## Answer
+[Synthesized answer with details]
+
+## Evidence
+- doc:pricing_plans.md
+- doc:overview.md
+
+================================================================================
+```
+
+### Testing Different Intents
+
+**FAQ Queries** (→ Retrieve → Synthesize):
+```bash
+python -m app.cli -q "What is NovaCRM?"
+python -m app.cli -q "How do pricing plans work?"
+python -m app.cli -q "What are the API rate limits?"
+```
+
+**DataLookup Queries** (→ Tools → Synthesize):
+```bash
+python -m app.cli -a A001 -q "Show my invoices"
+python -m app.cli -a A002 -q "What are my open tickets?"
+python -m app.cli -a A003 -q "Check my API usage for October"
+```
+
+**Escalation Queries** (→ Escalate):
+```bash
+python -m app.cli -q "I want to cancel my subscription"
+python -m app.cli -q "Request a custom feature"
+```
+
+### M3 Output
+
+![M3 Output](outputs/M3.jpg)
+
 ---
 
 ## Next Steps
 
-After M2 verification and commit:
-- **M3**: Build LangGraph state machine with conditional routing
-- **M4**: Add prompt templates and guardrails
-- **M5**: Integrate CLI/API and final submission
+After M3 verification and commit:
+- **M4**: Add advanced prompts and guardrails
+- **M5**: Final integration and submission
 
 ## License
 
