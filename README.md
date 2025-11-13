@@ -201,15 +201,14 @@ NovaCRM-Capstone/
 │   └── M4.jpg                 # M4 milestone output
 ├── scripts/                   # Utility scripts
 │   └── build_index.py         # Build FAISS index
-├── tests/                     # Test suites (M4) ⭐
+├── tests/                     # Test suites (M4) 
 │   └── test_graph_complete.py # 19 comprehensive tests
 ├── .env.example               # Environment variables template
 ├── .gitignore                 # Git exclusions
 ├── requirements.txt           # Python dependencies (M1 + M2 + M3 + M4)
-├── demo_assistant.py          # Interactive demo (M4) ⭐
+├── demo_assistant.py          # Interactive demo (M4) 
 ├── TEST_MCP_TOOLS.md          # MCP tool testing guide
-├── PROMPT_ENGINEERING.md      # Prompt techniques documentation (M4) ⭐
-├── M4_COMPLETION.md           # M4 milestone documentation ⭐
+├── PROMPT_ENGINEERING.md      # Prompt techniques documentation (M4) 
 └── README.md                  # This file
 ```
 
