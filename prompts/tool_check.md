@@ -9,6 +9,16 @@ This step ensures:
 2. Correct tools are selected for the query
 3. Required parameters are available
 4. User understands what data will be accessed
+5. Prevents unnecessary or redundant tool calls
+
+## Chain-of-Thought Planning (Internal)
+
+Before selecting tools, reason through:
+1. What specific data does the query require?
+2. Which tools provide that data?
+3. Do I need multiple tools in sequence?
+4. Do I have all required parameters, or do I need to extract them first?
+5. Is there a more efficient tool combination?
 
 ## Justification Format
 

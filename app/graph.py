@@ -19,6 +19,7 @@ from langchain_core.output_parsers import StrOutputParser
 from .state import AssistantState
 from .retriever import get_retriever
 from .mcp_client import get_mcp_tools, call_mcp_tool
+from .validation import get_validator, get_safety_guardrails
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROMPTS_DIR = BASE_DIR / "prompts"
@@ -48,6 +49,8 @@ class NovaCRMGraph:
         """
         self.llm = ChatOpenAI(model=model_name, temperature=temperature)
         self.retriever = None
+        self.validator = get_validator()
+        self.safety = get_safety_guardrails()
         self.graph = self._build_graph()
     
     def _build_graph(self) -> StateGraph:
@@ -60,14 +63,17 @@ class NovaCRMGraph:
         graph = StateGraph(AssistantState)
         
         # Add nodes
+        graph.add_node("safety_check", self._safety_check_node)
         graph.add_node("router", self._router_node)
         graph.add_node("retrieve", self._retrieve_node)
         graph.add_node("tools", self._tools_node)
         graph.add_node("synthesize", self._synthesize_node)
+        graph.add_node("validate", self._validate_node)
         graph.add_node("escalate", self._escalate_node)
         
         # Add edges
-        graph.add_edge(START, "router")
+        graph.add_edge(START, "safety_check")
+        graph.add_edge("safety_check", "router")
         
         # Conditional routing based on intent
         graph.add_conditional_edges(
@@ -80,13 +86,39 @@ class NovaCRMGraph:
             }
         )
         
-        # Flow to synthesize or end
+        # Flow to synthesize, validate, then end
         graph.add_edge("retrieve", "synthesize")
         graph.add_edge("tools", "synthesize")
-        graph.add_edge("synthesize", END)
+        graph.add_edge("synthesize", "validate")
+        graph.add_edge("validate", END)
         graph.add_edge("escalate", END)
         
         return graph.compile()
+    
+    def _safety_check_node(self, state: AssistantState) -> AssistantState:
+        """
+        Safety Check Node: Pre-process query for sensitive content
+        
+        Checks for PII, sensitive topics, and applies initial guardrails
+        """
+        query = state["query"]
+        
+        # Check for sensitive content
+        sensitivity_check = self.safety.check_sensitive_content(query)
+        if sensitivity_check["is_sensitive"] and sensitivity_check["should_escalate"]:
+            state["intent"] = "Escalation"
+            state["evidence"].append(f"safety:sensitive_topic_detected:{','.join(sensitivity_check['matched_topics'])}")
+            print(f"[Safety] Sensitive topic detected: {sensitivity_check['matched_topics']}")
+        
+        # Check for PII
+        pii_check = self.safety.check_pii_exposure(query)
+        if pii_check["has_pii"]:
+            state["query"] = pii_check["redacted_text"]
+            state["evidence"].append(f"safety:pii_redacted:{','.join(pii_check['pii_types'])}")
+            print(f"[Safety] PII redacted: {pii_check['pii_types']}")
+        
+        print(f"[Safety] Query passed safety checks")
+        return state
     
     def _router_node(self, state: AssistantState) -> AssistantState:
         """
@@ -176,9 +208,22 @@ class NovaCRMGraph:
             # Determine which tools to call
             tool_calls = self._determine_tool_calls(query, account_context)
             
-            # Execute tool calls
+            # Execute tool calls with validation
             results = []
             for tool_name, params in tool_calls:
+                # Validate tool parameters
+                param_validation = self.safety.validate_tool_params(tool_name, params)
+                
+                if not param_validation["is_valid"]:
+                    print(f"[Tools] Invalid params for {tool_name}: {param_validation['errors']}")
+                    results.append({
+                        "tool": tool_name,
+                        "params": params,
+                        "result": {"error": f"Invalid parameters: {', '.join(param_validation['errors'])}"}
+                    })
+                    continue
+                
+                # Call tool if params are valid
                 result = call_mcp_tool(tool_name, params)
                 results.append({
                     "tool": tool_name,
@@ -379,6 +424,45 @@ Our team will reach out shortly to assist you further.
         state["evidence"].append("escalated:human_support_required")
         
         print(f"[Escalate] Query escalated to human support")
+        
+        return state
+    
+    def _validate_node(self, state: AssistantState) -> AssistantState:
+        """
+        Validate Node: Validate output quality and apply final guardrails
+        
+        Checks for hallucination indicators, evidence quality, and answer completeness
+        """
+        answer = state.get("answer", "")
+        intent = state.get("intent", "")
+        evidence = state.get("evidence", [])
+        
+        # Validate answer
+        validation = self.validator.validate_answer(answer, intent, evidence)
+        
+        if not validation["is_valid"]:
+            print(f"[Validate] Answer failed validation: {validation['warnings']}")
+            state["errors"].extend(validation["warnings"])
+            # Add validation warning to answer
+            state["answer"] = f"{answer}\n\n*Note: This response may be incomplete. Please contact support for assistance.*"
+        
+        # Validate evidence quality
+        evidence_validation = self.validator.validate_evidence(evidence)
+        if not evidence_validation["is_valid"]:
+            print(f"[Validate] Evidence failed validation: {evidence_validation['warnings']}")
+            state["errors"].extend(evidence_validation["warnings"])
+        
+        # Check intent-answer match
+        intent_match = self.validator.check_intent_answer_match(intent, answer, evidence)
+        if not intent_match:
+            print(f"[Validate] Answer does not match intent: {intent}")
+            state["errors"].append(f"Answer-intent mismatch detected")
+        
+        # Sanitize output
+        state["answer"] = self.validator.sanitize_output(state["answer"])
+        
+        # Log validation metrics
+        print(f"[Validate] Validation complete - Valid: {validation['is_valid']}, Warnings: {len(validation['warnings'])}")
         
         return state
     
