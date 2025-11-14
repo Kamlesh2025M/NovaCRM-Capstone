@@ -278,19 +278,19 @@ NovaCRM-Capstone/
 │   ├── retriever.py           # FAISS RAG retriever
 │   ├── mcp_client.py          # MCP client (sync)
 │   ├── graph.py               # LangGraph state machine (7 nodes with validation)
-│   ├── validation.py          # Validation & guardrails (M4) ⭐
+│   ├── validation.py          # Validation & guardrails (M4) 
 │   ├── cli.py                 # Command-line interface
-│   └── api.py                 # FastAPI REST API (M5) ⭐
+│   └── api.py                 # FastAPI REST API (M5) 
 ├── prompts/                   # Prompt templates (M3 + M4 enhanced)
 │   ├── system.md              # Style guide + banned phrases
-│   ├── router.md              # Intent classification + few-shot examples ⭐
-│   ├── rag_synth.md           # RAG synthesis + CoT + contrastive examples ⭐
-│   └── tool_check.md          # Tool justification + validation rules ⭐
+│   ├── router.md              # Intent classification + few-shot examples 
+│   ├── rag_synth.md           # RAG synthesis + CoT + contrastive examples 
+│   └── tool_check.md          # Tool justification + validation rules 
 ├── servers/                   # MCP Server (M2)
 │   └── mcp_nova/
 │       ├── server.py          # FastMCP server with REST facade
 │       └── tools/             # 5 tool implementations
-├── scripts/                   # Setup and launch automation (M5) ⭐
+├── scripts/                   # Setup and launch automation (M5) 
 │   ├── build_index.py         # FAISS index builder
 │   ├── setup.sh               # Linux/Mac setup script
 │   ├── setup.ps1              # Windows setup script
@@ -300,28 +300,27 @@ NovaCRM-Capstone/
 │   └── run_api.ps1            # Launch FastAPI (Windows)
 ├── index/                     # FAISS vector store (generated)
 │   └── faiss_index/
-├── checkpoints.db             # SqliteSaver memory (generated, M5) ⭐
+├── checkpoints.db             # SqliteSaver memory (generated, M5) 
 ├── outputs/                   # Output screenshots and verification
 │   ├── M1.jpg                 # M1 milestone output
 │   ├── M2.jpg                 # M2 milestone output
 │   ├── M3.jpg                 # M3 milestone output
 │   └── M4.txt                 # M4 milestone output
-├── tests/                     # Comprehensive test suite (M4) ⭐
+├── tests/                     # Comprehensive test suite (M4) 
 │   ├── test_graph_complete.py # Graph end-to-end tests (19 test cases)
 │   ├── test_dataset.py        # Gold standard dataset (80 labeled queries)
 │   ├── measure_metrics.py     # Automated metrics collection (6 metrics)
 │   └── compare_metrics.py     # Before/After comparison tool
-├── demo_assistant.py          # Interactive demo with menu (M4) ⭐
-├── test_guardrails.py         # Safety testing script (M4) ⭐
-├── PROMPT_ENGINEERING.md      # Prompt techniques guide (M4) ⭐
-├── METRICS_MEASUREMENT.md     # Testing & metrics guide (M4) ⭐
+├── demo_assistant.py          # Interactive demo with menu (M4) 
+├── test_guardrails.py         # Safety testing script (M4) 
+├── PROMPT_ENGINEERING.md      # Prompt techniques guide (M4) 
+├── METRICS_MEASUREMENT.md     # Testing & metrics guide (M4) 
 ├── TEST_MCP_TOOLS.md          # MCP tools testing guide
-├── .env.example               # Environment template (M5) ⭐
-├── .gitignore                 # Git exclusions (M5) ⭐
-├── requirements.txt           # Python dependencies (updated M5) ⭐
+├── .env.example               # Environment template (M5) 
+├── .gitignore                 # Git exclusions (M5) 
+├── requirements.txt           # Python dependencies (updated M5) 
 └── README.md                  # This file
 
-⭐ = New or significantly updated in respective milestone
 ```
 
 ## Verification
@@ -727,13 +726,6 @@ python tests/test_dataset.py
 ### M4 Output
 
 ![M4 Output](outputs/M4.txt)
-
----
-
-## Next Steps
-
-After M4 verification and commit:
-- **M5**: Final integration, documentation, and submission
 
 ## License
 
