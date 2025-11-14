@@ -305,7 +305,7 @@ NovaCRM-Capstone/
 │   ├── M1.jpg                 # M1 milestone output
 │   ├── M2.jpg                 # M2 milestone output
 │   ├── M3.jpg                 # M3 milestone output
-│   └── M4.jpg                 # M4 milestone output
+│   └── M4.txt                 # M4 milestone output
 ├── tests/                     # Comprehensive test suite (M4) ⭐
 │   ├── test_graph_complete.py # Graph end-to-end tests (19 test cases)
 │   ├── test_dataset.py        # Gold standard dataset (80 labeled queries)
@@ -726,7 +726,7 @@ python tests/test_dataset.py
 
 ### M4 Output
 
-![M4 Output](outputs/M4.jpg)
+![M4 Output](outputs/M4.txt)
 
 ---
 
