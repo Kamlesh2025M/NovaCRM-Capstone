@@ -17,16 +17,16 @@ NovaCRM Assistant is an intelligent assistant for a fictional B2B SaaS company (
 
 ## Project Status
 
-**Current Milestone:** M4 - Prompts & Guardrails ✅
+**Current Milestone:** M5 - Final Submission ✅ **COMPLETE**
 
 ### Completed Milestones
 - [x] M1 - Data & Docs Setup
 - [x] M2 - MCP Server
 - [x] M3 - Graph & Routing
 - [x] M4 - Prompts & Guardrails
+- [x] M5 - Final Submission
 
-### Upcoming Milestones
-- [ ] M5 - Final Submission
+**Status**: Ready for evaluation
 
 ## Current Features
 
@@ -67,7 +67,7 @@ NovaCRM Assistant is an intelligent assistant for a fictional B2B SaaS company (
   - RAG synthesis (quality checklist)
   - Tool justification (rationale before calls)
 
-### M4 - Prompts & Guardrails
+### M4 - Prompts & Guardrails ✅
 
 **Advanced Prompt Engineering** (10 techniques documented in `PROMPT_ENGINEERING.md`):
 - **Few-Shot Prompting**: 6+ examples in router for 95% classification accuracy (+20%)
@@ -98,16 +98,113 @@ NovaCRM Assistant is an intelligent assistant for a fictional B2B SaaS company (
 - **Retrieve Node**: RAG retrieval with evidence tracking
 - **Tools Node**: Parameter validation before MCP tool calls
 - **Synthesize Node**: Structured answer generation with citations
+- **Validate Node**: Output validation with hallucination detection (after Synthesize)
+- **Escalate Node**: Auto-escalation for legal/sensitive queries
+
+### M5 - Final Submission ✅
+
+**FastAPI REST API** (`app/api.py`):
+- POST /query endpoint with Pydantic validation
+- Session management with UUIDs
+- Health checks and MCP status endpoints
+- GET /session/{id} for history retrieval
+- Direct tool endpoints (/tools/*)
+- Swagger documentation at /docs
+
+**Memory Persistence**:
+- SqliteSaver integration for conversation checkpointing
+- Session-based history (checkpoints.db)
+- Cross-request persistence
+- Thread-based session management
+
+**Setup & Launch Automation**:
+- setup.sh/setup.ps1 - Complete environment setup (Windows & Linux)
+- run_mcp_server.sh/ps1 - Launch MCP server
+- run_api.sh/ps1 - Launch FastAPI application
+- Automated FAISS index building
+- Configuration file templates (.env.example)
+
+**Complete Documentation**:
+- Updated README (this file)
+- Configuration files (.gitignore, requirements.txt)
+
+**Enhanced Graph Architecture** (7 nodes with memory):
+- **Safety Check Node**: Pre-processes queries for PII/sensitive content (first node after START)
+- **Router Node**: Intent classification with few-shot examples
+- **Retrieve Node**: RAG retrieval with evidence tracking
+- **Tools Node**: Parameter validation before MCP tool calls
+- **Synthesize Node**: Structured answer generation with citations
 - **Validate Node**: Quality assurance and output sanitization (last node before END)
 - **Escalate Node**: Professional human handoff messages
 
 **Testing & Metrics**:
 - Comprehensive test suite: 19 tests across 5 categories (FAQ, DataLookup, Escalation, Safety, Edge Cases)
+- Gold-standard test dataset: 80 labeled cases for metrics measurement
+- Automated metrics collection: 6 metrics with detailed JSON reports
 - Interactive demo: `demo_assistant.py` with menu-driven testing
-- Validation metrics: Answer grounding 98% (+18%), Professional tone 98% (+13%)
-- Before/After comparisons documented in `M4_COMPLETION.md`
+- Before/After comparison tool: Measure actual improvements
+- Complete measurement guide: `METRICS_MEASUREMENT.md`
 
-## Setup Instructions (M1)
+## Quick Start (M5)
+
+### Automated Setup
+
+**Windows**:
+```powershell
+.\scripts\setup.ps1
+```
+
+**Linux/Mac**:
+```bash
+chmod +x scripts/setup.sh
+./scripts/setup.sh
+```
+
+This automatically:
+- Creates virtual environment
+- Installs all dependencies
+- Creates .env from template
+- Builds FAISS index
+
+### Configure API Key
+
+Edit `.env` file:
+```
+OPENAI_API_KEY=your_actual_key_here
+```
+
+### Launch Application
+
+**Terminal 1 - Start MCP Server**:
+```bash
+python servers/mcp_nova/server.py
+```
+
+**Terminal 2 - Start CLI or API**:
+```bash
+# Option A: CLI
+python -m app.cli
+
+# Option B: FastAPI
+python -m app.api
+```
+
+### Access Swagger Documentation
+
+- MCP Server: http://127.0.0.1:3001/docs
+- FastAPI: http://127.0.0.1:8000/docs
+
+### Test API
+
+```bash
+curl -X POST "http://127.0.0.1:8000/query" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "What is NovaCRM?"}'
+```
+
+For detailed instructions, see `EXECUTION_STEPS.md`.
+
+## Manual Setup (Legacy)
 
 ### Prerequisites
 - Python 3.9 or higher
@@ -175,14 +272,15 @@ NovaCRM-Capstone/
 │       ├── support_module.md
 │       ├── api_guide.md
 │       └── security_faq.md
-├── app/                       # Application (M3 + M4)
+├── app/                       # Application (M3 + M4 + M5)
 │   ├── __init__.py
 │   ├── state.py               # TypedDict state schema
 │   ├── retriever.py           # FAISS RAG retriever
 │   ├── mcp_client.py          # MCP client (sync)
 │   ├── graph.py               # LangGraph state machine (7 nodes with validation)
 │   ├── validation.py          # Validation & guardrails (M4) ⭐
-│   └── cli.py                 # Command-line interface
+│   ├── cli.py                 # Command-line interface
+│   └── api.py                 # FastAPI REST API (M5) ⭐
 ├── prompts/                   # Prompt templates (M3 + M4 enhanced)
 │   ├── system.md              # Style guide + banned phrases
 │   ├── router.md              # Intent classification + few-shot examples ⭐
@@ -192,24 +290,38 @@ NovaCRM-Capstone/
 │   └── mcp_nova/
 │       ├── server.py          # FastMCP server with REST facade
 │       └── tools/             # 5 tool implementations
-├── index/                     # FAISS vector store (generated, gitignored)
+├── scripts/                   # Setup and launch automation (M5) ⭐
+│   ├── build_index.py         # FAISS index builder
+│   ├── setup.sh               # Linux/Mac setup script
+│   ├── setup.ps1              # Windows setup script
+│   ├── run_mcp_server.sh      # Launch MCP server (Linux/Mac)
+│   ├── run_mcp_server.ps1     # Launch MCP server (Windows)
+│   ├── run_api.sh             # Launch FastAPI (Linux/Mac)
+│   └── run_api.ps1            # Launch FastAPI (Windows)
+├── index/                     # FAISS vector store (generated)
 │   └── faiss_index/
+├── checkpoints.db             # SqliteSaver memory (generated, M5) ⭐
 ├── outputs/                   # Output screenshots and verification
 │   ├── M1.jpg                 # M1 milestone output
 │   ├── M2.jpg                 # M2 milestone output
 │   ├── M3.jpg                 # M3 milestone output
 │   └── M4.jpg                 # M4 milestone output
-├── scripts/                   # Utility scripts
-│   └── build_index.py         # Build FAISS index
-├── tests/                     # Test suites (M4) 
-│   └── test_graph_complete.py # 19 comprehensive tests
-├── .env.example               # Environment variables template
-├── .gitignore                 # Git exclusions
-├── requirements.txt           # Python dependencies (M1 + M2 + M3 + M4)
-├── demo_assistant.py          # Interactive demo (M4) 
-├── TEST_MCP_TOOLS.md          # MCP tool testing guide
-├── PROMPT_ENGINEERING.md      # Prompt techniques documentation (M4) 
+├── tests/                     # Comprehensive test suite (M4) ⭐
+│   ├── test_graph_complete.py # Graph end-to-end tests (19 test cases)
+│   ├── test_dataset.py        # Gold standard dataset (80 labeled queries)
+│   ├── measure_metrics.py     # Automated metrics collection (6 metrics)
+│   └── compare_metrics.py     # Before/After comparison tool
+├── demo_assistant.py          # Interactive demo with menu (M4) ⭐
+├── test_guardrails.py         # Safety testing script (M4) ⭐
+├── PROMPT_ENGINEERING.md      # Prompt techniques guide (M4) ⭐
+├── METRICS_MEASUREMENT.md     # Testing & metrics guide (M4) ⭐
+├── TEST_MCP_TOOLS.md          # MCP tools testing guide
+├── .env.example               # Environment template (M5) ⭐
+├── .gitignore                 # Git exclusions (M5) ⭐
+├── requirements.txt           # Python dependencies (updated M5) ⭐
 └── README.md                  # This file
+
+⭐ = New or significantly updated in respective milestone
 ```
 
 ## Verification
@@ -568,17 +680,39 @@ The enhanced graph outputs detailed validation information:
 [Validate] Validation complete - Valid: False, Warnings: 2
 ```
 
-### Metrics & Results
+### Metrics & Measurement
 
-**Quality Improvements** (documented in `PROMPT_ENGINEERING.md`):
+**Automated Metrics Measurement**:
 
-| Metric | Before M4 | After M4 | Improvement |
-|--------|-----------|----------|-------------|
-| Classification Accuracy | 75% | 95% | +20% |
-| Answer Grounding | 80% | 98% | +18% |
-| PII Protection | 90% | 100% | +10% |
-| Hallucination Rate | 15-20% | <5% | -75% |
-| Professional Tone | 85% | 98% | +13% |
+Run the measurement suite to get actual performance numbers:
+
+```bash
+# Measure all 6 metrics on 80 test cases
+python tests/measure_metrics.py
+
+# Compare with baseline (estimated pre-M4)
+python tests/compare_metrics.py outputs/metrics_report_XXXXXX.json
+
+# View test dataset
+python tests/test_dataset.py
+```
+
+**Expected Improvements** (See `METRICS_MEASUREMENT.md` for methodology):
+
+| Metric | Target Before | Target After | Improvement | Measurement Method |
+|--------|---------------|--------------|-------------|-------------------|
+| Classification Accuracy | 75% | 95% | +20% | Intent match on 80 queries |
+| Answer Grounding | 80% | 98% | +18% | Evidence + citation check |
+| PII Protection | 90% | 100% | +10% | Detection on 5 PII cases |
+| Professional Tone | 85% | 98% | +13% | Banned phrase detection |
+| Error Handling | 94% | 97% | +3% | No crashes on 80 queries |
+| Sensitive Escalation | 70% | 100% | +30% | Escalation on 10 sensitive cases |
+
+**Measurement Infrastructure**:
+- ✅ 80 gold-standard test cases with expected outcomes
+- ✅ 6 automated metrics with JSON reports
+- ✅ Before/after comparison tool
+- ✅ Complete measurement guide
 
 **Key Features**:
 - ✅ Few-shot prompting for better intent classification

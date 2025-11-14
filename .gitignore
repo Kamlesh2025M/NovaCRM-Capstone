@@ -1,9 +1,16 @@
+# Environment
+.env
+*.env
+
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
+env/
+venv/
+ENV/
 build/
 develop-eggs/
 dist/
@@ -20,42 +27,23 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual Environment
-venv/
-env/
-ENV/
-.venv
-
-# Environment Variables
-.env
-
-# IDE
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Project Specific
-index/faiss_index/
+# Databases and Indexes
 *.db
-*.sqlite
 checkpoints.db
 
 # Logs
 *.log
-logs/
 
-# Jupyter
-.ipynb_checkpoints/
-*.ipynb
+# OS
+.DS_Store
+Thumbs.db
 
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-
+# Test outputs
+outputs/

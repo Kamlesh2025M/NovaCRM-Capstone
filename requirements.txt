@@ -1,20 +1,27 @@
-# M1 - Data & Docs Setup Dependencies
-langchain>=0.3.23
-langchain-community>=0.3.21
-langchain-openai>=0.3.35
-langchain-text-splitters>=0.3.5
-langchain-core<1.0
-faiss-cpu==1.9.0.post1
-python-dotenv>=1.0.1
-openai==1.58.1
+# Core LangChain and LangGraph
+langchain==0.3.12
+langchain-openai==0.2.14
+langchain-community==0.3.12
+langgraph==0.2.59
+langgraph-checkpoint-sqlite==1.0.0
 
-# M2 - MCP Server Dependencies
+# MCP (Model Context Protocol)
 fastmcp==0.4.0
+
+# Vector Store and Embeddings
+faiss-cpu==1.9.0.post1
+
+# API and Server
 fastapi==0.115.6
 uvicorn==0.34.0
 pydantic==2.10.3
 
-# M3 - Graph & Routing Dependencies
-langgraph>=1.0.3
-typing-extensions>=4.12.2
-requests>=2.32.3
+# Utilities
+python-dotenv==1.0.1
+requests==2.32.3
+
+# OpenAI
+openai==1.57.4
+
+# Text Processing
+tiktoken==0.8.0
