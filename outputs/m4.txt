@@ -1,0 +1,783 @@
+(venv) PS C:\Users\kamleshmali01\OneDrive - Nagarro\Documents\Initiatives\Agentic AI\Training\External\NovaCRM-Capstone\NovaCRM-Capstone> python tests/test_graph_complete.py
+
+================================================================================      ====================================
+                    NovaCRM GRAPH - COMPREHENSIVE TEST SUITE
+================================================================================      
+
+################################################################################      
+# FAQ INTENT TESTS
+################################################################################      
+[Safety] Query passed safety checks
+[Router] Classified intent: FAQ
+[Retrieve] Retrieved 5 documents
+[Synthesize] Generated final answer
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================
+TEST: FAQ - Product Overview
+================================================================================
+Query: What is NovaCRM?
+Intent: FAQ
+
+Answer:
+**Answer:**
+
+NovaCRM is a cloud-based customer relationship management platform designed for small and medium enterprises, offering modular components for efficient management of customer interactions, payments, and communications.
+
+**Details:**
+- Type: Cloud-based CRM platform (Source: overview.md)
+- Target Audience: Small and medium enterprises (Source: overview.md)
+- Features: Includes modules such as Billing, Campaigns, and Support (Source: overview.md)
+
+**Sources:**
+- overview.md
+
+**Note:**
+NovaCRM's modular approach allows businesses to customize their CRM experience based on specific needs.
+
+**Evidence:**
+- doc:overview.md
+- doc:pricing_plans.md
+- doc:security_faq.md
+- doc:api_guide.md
+- doc:campaigns_module.md
+
+Evidence (5 items):
+  - doc:overview.md
+  - doc:pricing_plans.md
+  - doc:security_faq.md
+  - doc:api_guide.md
+  - doc:campaigns_module.md
+================================================================================
+
+[Safety] Query passed safety checks
+[Router] Classified intent: FAQ
+[Retrieve] Retrieved 5 documents
+[Synthesize] Generated final answer
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================
+TEST: FAQ - Pricing Information
+================================================================================
+Query: What are the pricing plans for NovaCRM?
+Intent: FAQ
+
+Answer:
+**Answer:**
+NovaCRM offers three pricing plans: Free, Pro, and Enterprise.
+
+**Details:**
+- **Free Plan**: 
+  - Cost: Free
+  - User limit: Up to 3 users
+  - Contacts: 500 contacts
+  - Support: Community support only (Source: pricing_plans.md)
+  
+- **Pro Plan**: 
+  - Cost: ₹499/month per user
+  - Features: Includes Billing and Campaigns modules
+  - API calls: 50,000 API calls/month (Source: pricing_plans.md)
+  
+- **Enterprise Plan**: 
+  - Cost: Custom pricing
+  - User limit: Unlimited users
+  - API calls: 500,000 API calls/month
+  - Support: Dedicated Customer Success Manager (CSM) and premium support with a 2-hour SLA (Source: pricing_plans.md)
+
+**Sources:**
+- pricing_plans.md
+
+**Note:**
+The Free Plan is suitable for small teams, while the Pro and Enterprise Plans cater to larger organizations with more extensive needs.
+
+**Evidence:**
+- doc:pricing_plans.md
+- doc:overview.md
+- doc:api_guide.md
+- doc:security_faq.md
+- doc:overview.md
+
+Evidence (5 items):
+  - doc:pricing_plans.md
+  - doc:overview.md
+  - doc:api_guide.md
+  - doc:security_faq.md
+  - doc:overview.md
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: FAQ
+[Retrieve] Retrieved 5 documents
+[Synthesize] Generated final answer
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================      
+TEST: FAQ - API Rate Limits
+================================================================================      
+Query: What are the API rate limits?
+Intent: FAQ
+
+Answer:
+**Answer:**
+The API rate limits for NovaCRM vary by subscription plan.
+
+**Details:**
+- **Free Plan**: 10 requests per minute (Source: api_guide.md)
+- **Pro Plan**: 100 requests per minute (Source: api_guide.md)
+- **Enterprise Plan**: 1000 requests per minute (Source: api_guide.md)
+
+**Sources:**
+- api_guide.md
+
+**Note:**
+Exceeding the rate limit results in an HTTP 429 error, along with a `Retry-After` header indicating when to retry the request.
+
+**Evidence:**
+- doc:api_guide.md
+- doc:overview.md
+- doc:pricing_plans.md
+- doc:billing_module.md
+- doc:campaigns_module.md
+
+Evidence (5 items):
+  - doc:api_guide.md
+  - doc:overview.md
+  - doc:pricing_plans.md
+  - doc:billing_module.md
+  - doc:campaigns_module.md
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: FAQ
+[Retrieve] Retrieved 5 documents
+[Synthesize] Generated final answer
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================      
+TEST: FAQ - Feature Query
+================================================================================      
+Query: How does the contact management feature work?
+Intent: FAQ
+
+Answer:
+**Answer:**
+The contact management feature is part of the NovaCRM platform, allowing users to efficiently manage customer interactions and data.
+
+**Details:**
+- NovaCRM is designed for small and medium enterprises, providing a modular approach to manage customer relationships, including contact management (Source: overview.md).  
+- The platform supports up to 500 contacts in the Free Plan, with higher limits in the Pro and Enterprise Plans (Source: pricing_plans.md).
+- Users can utilize the Campaigns module to analyze interactions with contacts through email campaigns, enhancing engagement (Source: campaigns_module.md).
+
+**Sources:**
+- overview.md
+- pricing_plans.md
+- campaigns_module.md
+
+**Note:**
+The specific functionalities of contact management, such as data entry, segmentation, or integration with other modules, are not detailed in the provided documents.        
+
+**Evidence:**
+- doc:pricing_plans.md
+- doc:campaigns_module.md
+- doc:overview.md
+- doc:pricing_plans.md
+- doc:support_module.md
+
+Evidence (5 items):
+  - doc:pricing_plans.md
+  - doc:campaigns_module.md
+  - doc:overview.md
+  - doc:pricing_plans.md
+  - doc:support_module.md
+================================================================================      
+
+
+✅ FAQ Tests Complete
+
+
+################################################################################      
+# DATA LOOKUP INTENT TESTS
+################################################################################      
+[Safety] Query passed safety checks
+[Router] Classified intent: DataLookup
+[Tools] Called 1 tools
+[Synthesize] Generated final answer
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================      
+TEST: DataLookup - Account Info
+================================================================================      
+Query: What is the plan for account A001?
+Intent: DataLookup
+
+Answer:
+## Account Lookup
+- Company: Company_001
+- Plan: Enterprise (Basic tier)
+- Billing: annual
+- CSM: Ritika Gupta
+- Renewal: 2026-04-05
+
+**Evidence:**
+- tool_justification:Justification:
+```
+Tool: account_lookup
+Reason: Need to retrieve plan details for account A001.
+Para
+- tool:account_lookup:['account_id']
+
+Evidence (2 items):
+  - tool_justification:Justification:
+```
+Tool: account_lookup
+Reason: Need to retrieve plan details for account A001.
+Para
+  - tool:account_lookup:['account_id']
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: DataLookup
+[Tools] Called 1 tools
+[Synthesize] Generated final answer
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================      
+TEST: DataLookup - Invoice Query
+================================================================================      
+Query: Show me invoices for A002 in October 2025
+Intent: DataLookup
+
+Answer:
+## Invoice Status
+- Total Invoices: 1
+- Total Amount: $1999.00
+- Paid: $1999.00
+- Overdue: $0.00
+- Pending: $0.00
+
+**Evidence:**
+- tool_justification:Justification:
+```
+Tool: invoice_status
+Reason: Retrieve invoice data for account A002 for October 2
+- tool:invoice_status:['account_id', 'period']
+
+Evidence (2 items):
+  - tool_justification:Justification:
+```
+Tool: invoice_status
+Reason: Retrieve invoice data for account A002 for October 2
+  - tool:invoice_status:['account_id', 'period']
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: DataLookup
+[Tools] Called 0 tools
+[Synthesize] Generated final answer
+[Validate] Answer does not match intent: DataLookup
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================      
+TEST: DataLookup - Ticket Summary
+================================================================================      
+Query: How many open tickets does Company_005 have?
+Intent: DataLookup
+
+Answer:
+**Evidence:**
+- tool_justification:Justification:
+```
+Tool: account_lookup
+Reason: Need to find account_id for Company_005 to retrieve
+
+Evidence (1 items):
+  - tool_justification:Justification:
+```
+Tool: account_lookup
+Reason: Need to find account_id for Company_005 to retrieve
+
+Errors/Warnings (1 items):
+  - Answer-intent mismatch detected
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: DataLookup
+[Tools] Called 1 tools
+[Synthesize] Generated final answer
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================      
+TEST: DataLookup - Usage Report
+================================================================================      
+Query: What is my API usage for A003 in November 2025?
+Intent: DataLookup
+
+Answer:
+## Usage Report
+- Month: 2025-10
+- API Calls: 349,599
+- Email Sends: 78,270
+- Storage: 114.46 GB
+
+**Evidence:**
+- tool_justification:Justification:
+```
+Tool: usage_report
+Reason: Need to retrieve API usage metrics for account A003 fo
+- tool:usage_report:['account_id', 'month']
+
+Evidence (2 items):
+  - tool_justification:Justification:
+```
+Tool: usage_report
+Reason: Need to retrieve API usage metrics for account A003 fo
+  - tool:usage_report:['account_id', 'month']
+================================================================================      
+
+
+✅ DataLookup Tests Complete
+
+
+################################################################################      
+# ESCALATION INTENT TESTS
+################################################################################      
+[Safety] Query passed safety checks
+[Router] Classified intent: Escalation
+[Escalate] Query escalated to human support
+
+================================================================================      
+TEST: Escalation - Account Termination
+================================================================================      
+Query: I want to cancel my subscription
+Intent: Escalation
+
+Answer:
+
+I understand you need assistance with: "I want to cancel my subscription"
+
+This request requires specialized support from our team. Here's what you can do:      
+
+**Immediate Actions:**
+- Email: support@novacrm.com
+- Phone: 1-800-NOVA-CRM
+- Submit a ticket through your account portal
+
+**What to Include:**
+- Your account ID or company name
+- Detailed description of your request
+- Any relevant dates or transaction IDs
+- Preferred contact method
+
+**Expected Response Time:**
+- High priority: 2 hours
+- Standard: 24 hours
+
+Our team will reach out shortly to assist you further.
+
+
+Evidence (1 items):
+  - escalated:human_support_required
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: Escalation
+[Escalate] Query escalated to human support
+
+================================================================================      
+TEST: Escalation - Billing Dispute
+================================================================================      
+Query: There's an unauthorized charge on my account, I need a refund
+Intent: Escalation
+
+Answer:
+
+I understand you need assistance with: "There's an unauthorized charge on my account, I need a refund"
+
+This request requires specialized support from our team. Here's what you can do:      
+
+**Immediate Actions:**
+- Email: support@novacrm.com
+- Phone: 1-800-NOVA-CRM
+- Submit a ticket through your account portal
+
+**What to Include:**
+- Your account ID or company name
+- Detailed description of your request
+- Any relevant dates or transaction IDs
+- Preferred contact method
+
+**Expected Response Time:**
+- High priority: 2 hours
+- Standard: 24 hours
+
+Our team will reach out shortly to assist you further.
+
+
+Evidence (1 items):
+  - escalated:human_support_required
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: Escalation
+[Escalate] Query escalated to human support
+
+================================================================================      
+TEST: Escalation - Legal Issue
+================================================================================      
+Query: I need to discuss a legal matter with your team
+Intent: Escalation
+
+Answer:
+
+I understand you need assistance with: "I need to discuss a legal matter with your team"
+
+This request requires specialized support from our team. Here's what you can do:      
+
+**Immediate Actions:**
+- Email: support@novacrm.com
+- Phone: 1-800-NOVA-CRM
+- Submit a ticket through your account portal
+
+**What to Include:**
+- Your account ID or company name
+- Detailed description of your request
+- Any relevant dates or transaction IDs
+- Preferred contact method
+
+**Expected Response Time:**
+- High priority: 2 hours
+- Standard: 24 hours
+
+Our team will reach out shortly to assist you further.
+
+
+Evidence (1 items):
+  - escalated:human_support_required
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: Escalation
+[Escalate] Query escalated to human support
+
+================================================================================      
+TEST: Escalation - Ambiguous Query
+================================================================================      
+Query: Help me with something
+Intent: Escalation
+
+Answer:
+
+I understand you need assistance with: "Help me with something"
+
+This request requires specialized support from our team. Here's what you can do:      
+
+**Immediate Actions:**
+- Email: support@novacrm.com
+- Phone: 1-800-NOVA-CRM
+- Submit a ticket through your account portal
+
+**What to Include:**
+- Your account ID or company name
+- Detailed description of your request
+- Any relevant dates or transaction IDs
+- Preferred contact method
+
+**Expected Response Time:**
+- High priority: 2 hours
+- Standard: 24 hours
+
+Our team will reach out shortly to assist you further.
+
+
+Evidence (1 items):
+  - escalated:human_support_required
+================================================================================      
+
+
+✅ Escalation Tests Complete
+
+
+################################################################################      
+# SAFETY & VALIDATION TESTS
+################################################################################      
+[Safety] PII redacted: ['email']
+[Safety] Query passed safety checks
+[Router] Classified intent: Escalation
+[Escalate] Query escalated to human support
+
+================================================================================      
+TEST: Safety - PII Redaction
+================================================================================      
+Query: My email is [REDACTED_EMAIL] and I need help
+Intent: Escalation
+
+Answer:
+
+I understand you need assistance with: "My email is [REDACTED_EMAIL] and I need help" 
+
+This request requires specialized support from our team. Here's what you can do:      
+
+**Immediate Actions:**
+- Email: support@novacrm.com
+- Phone: 1-800-NOVA-CRM
+- Submit a ticket through your account portal
+
+**What to Include:**
+- Your account ID or company name
+- Detailed description of your request
+- Any relevant dates or transaction IDs
+- Preferred contact method
+
+**Expected Response Time:**
+- High priority: 2 hours
+- Standard: 24 hours
+
+Our team will reach out shortly to assist you further.
+
+
+Evidence (2 items):
+  - safety:pii_redacted:email
+  - escalated:human_support_required
+================================================================================      
+
+[Safety] Sensitive topic detected: ['data_breach']
+[Safety] Query passed safety checks
+[Router] Classified intent: Escalation
+[Escalate] Query escalated to human support
+
+================================================================================      
+TEST: Safety - Data Breach Detection
+================================================================================      
+Query: I think my account was breached
+Intent: Escalation
+
+Answer:
+
+I understand you need assistance with: "I think my account was breached"
+
+This request requires specialized support from our team. Here's what you can do:      
+
+**Immediate Actions:**
+- Email: support@novacrm.com
+- Phone: 1-800-NOVA-CRM
+- Submit a ticket through your account portal
+
+**What to Include:**
+- Your account ID or company name
+- Detailed description of your request
+- Any relevant dates or transaction IDs
+- Preferred contact method
+
+**Expected Response Time:**
+- High priority: 2 hours
+- Standard: 24 hours
+
+Our team will reach out shortly to assist you further.
+
+
+Evidence (2 items):
+  - safety:sensitive_topic_detected:data_breach
+  - escalated:human_support_required
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: DataLookup
+[Tools] Called 0 tools
+[Synthesize] Generated final answer
+[Validate] Answer does not match intent: DataLookup
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================      
+TEST: Safety - Invalid Account Format
+================================================================================      
+Query: Show me info for account XYZ123
+Intent: DataLookup
+
+Answer:
+**Evidence:**
+- tool_justification:Justification:
+```
+Tool: account_lookup
+Reason: Need to retrieve account details for account XYZ123.
+
+Evidence (1 items):
+  - tool_justification:Justification:
+```
+Tool: account_lookup
+Reason: Need to retrieve account details for account XYZ123.
+
+Errors/Warnings (1 items):
+  - Answer-intent mismatch detected
+================================================================================      
+
+
+✅ Safety & Validation Tests Complete
+
+
+################################################################################      
+# EDGE CASE TESTS
+################################################################################      
+[Safety] Query passed safety checks
+[Router] Classified intent: Escalation
+[Escalate] Query escalated to human support
+
+================================================================================      
+TEST: Edge Case - Empty Query
+================================================================================      
+Query:
+Intent: Escalation
+
+Answer:
+
+I understand you need assistance with: ""
+
+This request requires specialized support from our team. Here's what you can do:      
+
+**Immediate Actions:**
+- Email: support@novacrm.com
+- Phone: 1-800-NOVA-CRM
+- Submit a ticket through your account portal
+
+**What to Include:**
+- Your account ID or company name
+- Detailed description of your request
+- Any relevant dates or transaction IDs
+- Preferred contact method
+
+**Expected Response Time:**
+- High priority: 2 hours
+- Standard: 24 hours
+
+Our team will reach out shortly to assist you further.
+
+
+Evidence (1 items):
+  - escalated:human_support_required
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: FAQ
+[Retrieve] Retrieved 5 documents
+[Synthesize] Generated final answer
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================      
+TEST: Edge Case - Long Query
+================================================================================      
+Query: What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM? What is NovaCRM?
+Intent: FAQ
+
+Answer:
+**Answer:**
+NovaCRM is a cloud-based customer relationship management platform designed for small and medium enterprises, offering modular components for managing customer interactions, payments, and communications.
+
+**Details:**
+- **Platform Type**: Cloud-based CRM for small and medium enterprises (Source: overview.md).
+- **Modular Components**: Includes features such as Billing, Campaigns, and Support (Source: overview.md).
+- **Efficiency**: Aims to help businesses manage customer interactions and communications effectively (Source: overview.md).
+
+**Sources:**
+- overview.md
+
+**Note:**
+This overview provides a general understanding of NovaCRM's purpose and functionality. For specific features or pricing, refer to the relevant documents.
+
+**Evidence:**
+- doc:overview.md
+- doc:pricing_plans.md
+- doc:security_faq.md
+- doc:api_guide.md
+- doc:overview.md
+
+Evidence (5 items):
+  - doc:overview.md
+  - doc:pricing_plans.md
+  - doc:security_faq.md
+  - doc:api_guide.md
+  - doc:overview.md
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: FAQ
+[Retrieve] Retrieved 5 documents
+[Synthesize] Generated final answer
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================      
+TEST: Edge Case - Special Characters
+================================================================================      
+Query: What is <NovaCRM>?
+Intent: FAQ
+
+Answer:
+**Answer:**
+NovaCRM is a cloud-based customer relationship management platform designed for small and medium enterprises, offering modular components for efficient management of customer interactions, payments, and communications.
+
+**Details:**
+- Type: Cloud-based CRM platform (Source: overview.md)
+- Target Audience: Small and medium enterprises (Source: overview.md)
+- Features: Includes modules such as Billing, Campaigns, and Support (Source: overview.md)
+
+**Sources:**
+- overview.md
+
+**Note:**
+NovaCRM's modular approach allows businesses to customize their CRM experience based on specific needs.
+
+**Evidence:**
+- doc:overview.md
+- doc:pricing_plans.md
+- doc:security_faq.md
+- doc:api_guide.md
+- doc:campaigns_module.md
+
+Evidence (5 items):
+  - doc:overview.md
+  - doc:pricing_plans.md
+  - doc:security_faq.md
+  - doc:api_guide.md
+  - doc:campaigns_module.md
+================================================================================      
+
+[Safety] Query passed safety checks
+[Router] Classified intent: DataLookup
+[Tools] Called 1 tools
+[Synthesize] Generated final answer
+[Validate] Validation complete - Valid: True, Warnings: 0
+
+================================================================================      
+TEST: Edge Case - Mixed Intent
+================================================================================      
+Query: What is NovaCRM pricing and show me my invoices for A001?
+Intent: DataLookup
+
+Answer:
+## Invoice Status
+- Total Invoices: 3
+- Total Amount: $497.00
+- Paid: $497.00
+- Overdue: $0.00
+- Pending: $0.00
+
+**Evidence:**
+- tool_justification:Justification:
+```
+Tool: account_lookup
+Reason: Need to retrieve account details and pricing plan fo
+- tool:invoice_status:['account_id']
+
+Evidence (2 items):
+  - tool_justification:Justification:
+```
+Tool: account_lookup
+Reason: Need to retrieve account details and pricing plan fo
+  - tool:invoice_status:['account_id']
+================================================================================      
+
+
+✅ Edge Case Tests Complete
+
+
+================================================================================      
+                              ALL TESTS PASSED ✅
+================================================================================  
