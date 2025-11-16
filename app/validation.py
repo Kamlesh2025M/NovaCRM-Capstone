@@ -23,6 +23,14 @@ class OutputValidator:
             r"I'm just an AI",
             r"I don't have access to",
         ]
+        # Statistics tracking
+        self.stats = {
+            "total": 0,
+            "valid": 0,
+            "invalid": 0,
+            "total_evidence": 0,
+            "total_answer_length": 0
+        }
     
     def validate_answer(self, answer: str, intent: str, evidence: List[str]) -> Dict[str, Any]:
         """
@@ -37,6 +45,7 @@ class OutputValidator:
             Validation result with is_valid flag and warnings list
         """
         warnings = []
+        blocked_patterns = []
         
         # Check 1: Answer is not empty
         if not answer or len(answer.strip()) < 10:
@@ -46,6 +55,7 @@ class OutputValidator:
         for pattern in self.banned_content_patterns:
             if re.search(pattern, answer, re.IGNORECASE):
                 warnings.append(f"Contains banned phrase: {pattern}")
+                blocked_patterns.append(pattern)
         
         # Check 3: Has evidence (except for Escalation)
         if intent != "Escalation" and not evidence:
@@ -64,9 +74,20 @@ class OutputValidator:
         if intent == "FAQ" and "Sources:" not in answer and len(evidence) > 0:
             warnings.append("FAQ answer missing explicit source citations")
         
+        # Update statistics
+        is_valid = len(warnings) == 0
+        self.stats["total"] += 1
+        if is_valid:
+            self.stats["valid"] += 1
+        else:
+            self.stats["invalid"] += 1
+        self.stats["total_evidence"] += len(evidence)
+        self.stats["total_answer_length"] += len(answer)
+        
         return {
-            "is_valid": len(warnings) == 0,
+            "is_valid": is_valid,
             "warnings": warnings,
+            "blocked_patterns": blocked_patterns,
             "answer_length": len(answer),
             "evidence_count": len(evidence)
         }
@@ -100,6 +121,7 @@ class OutputValidator:
         return {
             "is_valid": len(warnings) == 0,
             "warnings": warnings,
+            "has_sources": len(evidence) > 0,
             "evidence_count": len(evidence),
             "evidence_types": list(evidence_types)
         }
@@ -209,6 +231,33 @@ class OutputValidator:
                 warnings.append(f"Contains absolute statement: '{term}'")
         
         return warnings
+    
+    def get_validation_summary(self) -> Dict[str, Any]:
+        """
+        Get summary statistics for all validations performed
+        
+        Returns:
+            Dictionary with validation statistics
+        """
+        total = self.stats["total"]
+        if total == 0:
+            return {
+                "total": 0,
+                "valid": 0,
+                "invalid": 0,
+                "success_rate": 0.0,
+                "avg_evidence_count": 0.0,
+                "avg_answer_length": 0.0
+            }
+        
+        return {
+            "total": total,
+            "valid": self.stats["valid"],
+            "invalid": self.stats["invalid"],
+            "success_rate": (self.stats["valid"] / total) * 100,
+            "avg_evidence_count": self.stats["total_evidence"] / total,
+            "avg_answer_length": self.stats["total_answer_length"] / total
+        }
 
 class SafetyGuardrails:
     """
