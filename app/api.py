@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any
 from datetime import datetime
 import uuid
+import sqlite3
 from pathlib import Path
 
 from dotenv import load_dotenv, find_dotenv
@@ -49,6 +50,7 @@ app = FastAPI(
 
 graph_instance = None
 memory_saver = None
+db_connection = None
 
 class QueryRequest(BaseModel):
     """Request model for query endpoint"""
@@ -73,7 +75,7 @@ class QueryResponse(BaseModel):
 @app.on_event("startup")
 async def startup_event():
     """Initialize graph and memory on startup"""
-    global graph_instance, memory_saver
+    global graph_instance, memory_saver, db_connection
     
     print("=" * 60)
     print("Initializing NovaCRM Assistant API...")
@@ -81,10 +83,25 @@ async def startup_event():
     
     graph_instance = get_graph()
     
-    memory_saver = SqliteSaver.from_conn_string(str(CHECKPOINTS_DB))
+    # Create a persistent sqlite connection for the application lifetime
+    db_connection = sqlite3.connect(str(CHECKPOINTS_DB), check_same_thread=False)
+    memory_saver = SqliteSaver(db_connection)
     
+    print(f"Database: {CHECKPOINTS_DB}")
     print("API ready!")
     print("=" * 60)
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Clean up resources on shutdown"""
+    global db_connection
+    
+    if db_connection:
+        try:
+            db_connection.close()
+            print("Database connection closed successfully")
+        except Exception as e:
+            print(f"Error closing database: {e}")
 
 @app.get("/", tags=["Health"])
 def root():
